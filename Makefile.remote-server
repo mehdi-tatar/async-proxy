@@ -1,0 +1,32 @@
+CXX      := -g++
+CXXFLAGS := -pedantic-errors -Wall -Wextra
+LDFLAGS  := -lpthread
+BUILD    := ./build
+OBJ_DIR  := $(BUILD)/objects
+APP_DIR  := $(BUILD)/apps
+TARGET   := remote-server
+INCLUDE  := -Iinclude/ -Iinclude/remote-server
+SRC      :=                                \
+   $(wildcard src/remote-server/*.cpp)     \
+   $(wildcard src/main-remote-server.cpp)  \
+
+OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
+
+all: build $(APP_DIR)/$(TARGET)
+
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@ $(LDFLAGS)
+
+$(APP_DIR)/$(TARGET): $(OBJECTS)
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -o $(APP_DIR)/$(TARGET) $^ $(LDFLAGS)
+
+build:
+	@mkdir -p $(APP_DIR)
+	@mkdir -p $(OBJ_DIR)
+
+clean:
+	-@rm -rvf $(OBJ_DIR)/*
+	-@rm -rvf $(APP_DIR)/*
+
