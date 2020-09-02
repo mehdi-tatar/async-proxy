@@ -17,8 +17,8 @@ On linux install boost with: `apt-get install libboost-all-dev`
 # Example
 Run Remote Server and Proxy Server in Background
 ```
-./build/apps/remote-server <path-to-config> &
-./build/apps/proxy-server <path-to-config> &
+./build/apps/remote-server config.toml &
+./build/apps/proxy-server config.toml &
 ```
 
 Copy Client File
