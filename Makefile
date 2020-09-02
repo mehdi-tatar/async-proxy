@@ -1,9 +1,6 @@
 # Makes the tcpsocket lib
 
-all:
-	make -f Makefile.client
-	make -f Makefile.proxy-server
-	make -f Makefile.remote-server
+all: client proxy-server remote-server
 
 clean:
 	make -f Makefile.client        clean
