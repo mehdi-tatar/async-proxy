@@ -15,6 +15,16 @@ On linux install boost with: `apt-get install libboost-all-dev`
 ```
 
 # Example
+config.toml
+```
+[server]
+protocol = "tcp"
+address = "127.0.0.1:3001"
+[upstream]
+address = "127.0.0.1:5001"
+timeout = "10s"
+```
+
 Run Remote Server and Proxy Server in Background
 ```
 ./build/apps/remote-server config.toml &
