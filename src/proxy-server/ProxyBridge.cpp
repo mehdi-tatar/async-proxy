@@ -7,7 +7,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "ProxyBridge.h"
+#include <ProxyBridge.h>
 
 
 typedef boost::asio::ip::tcp::socket socket_type;

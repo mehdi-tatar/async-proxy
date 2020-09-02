@@ -1,40 +1,56 @@
+#include <config.h>
+
 #include <iostream>
 #include <string>
 #include <boost/asio.hpp>
 
-#include "ProxyAcceptor.h"
+#include <ProxyAcceptor.h>
+#include <IpPortConfig.h>
+#include <ConfigReader.h>
 
 
 int main(int argc, char* argv[])
 {
-   if (argc != 5)
-   {
-      std::cerr << "usage: tcpproxy_server <local host ip> <local port> <forward host ip> <forward port>" << std::endl;
-      return 1;
-   }
+    if (argc != 2) {
+        printf("usage: %s <path-to-config>\n", argv[0]);
+        exit(1);
+    }
 
-   const unsigned short local_port   = static_cast<unsigned short>(::atoi(argv[2]));
-   const unsigned short forward_port = static_cast<unsigned short>(::atoi(argv[4]));
-   const std::string local_host      = argv[1];
-   const std::string forward_host    = argv[3];
+    ConfigReader config_reader("config.toml");
+    IpPortConfig ip_port_config_server   = config_reader.get_config_server();
+    IpPortConfig ip_port_config_upstream = config_reader.get_config_upstream();
 
-   boost::asio::io_service ios;
+    const std::string local_host      = ip_port_config_server.get_ip();
+    const unsigned short local_port   = static_cast<unsigned short>(ip_port_config_server.get_port());
 
-   try
-   {
-      ProxyAcceptor acceptor(ios,
-                             local_host, local_port,
-                             forward_host, forward_port);
+    const std::string forward_host    = ip_port_config_upstream.get_ip();
+    const unsigned short forward_port = static_cast<unsigned short>(ip_port_config_upstream.get_port());
 
-      acceptor.accept_connections();
+#if DEBUG_MOD_PRINT==1
+    cout << "DEBUG:" << endl;
+    cout << local_host << endl;
+    cout << local_port << endl;
+    cout << forward_host << endl;
+    cout << forward_port << endl;
+#endif
 
-      ios.run();
-   }
-   catch(std::exception& e)
-   {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return 1;
-   }
+    boost::asio::io_service ios;
 
-   return 0;
+    try
+    {
+        ProxyAcceptor acceptor(ios,
+                               local_host, local_port,
+                               forward_host, forward_port);
+
+        acceptor.accept_connections();
+
+        ios.run();
+    }
+    catch(std::exception& e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
+
+    return 0;
 }

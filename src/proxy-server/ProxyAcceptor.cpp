@@ -6,29 +6,29 @@
 #include <boost/bind.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "ProxyAcceptor.h"
+#include <ProxyAcceptor.h>
 
 
 ProxyAcceptor::ProxyAcceptor(boost::asio::io_service& io_service,
-        const std::string& local_host, unsigned short local_port,
-        const std::string& upstream_host, unsigned short upstream_port)
-: io_service_(io_service),
- localhost_address(boost::asio::ip::address_v4::from_string(local_host)),
- acceptor_(io_service_,boost::asio::ip::tcp::endpoint(localhost_address,local_port)),
- upstream_port_(upstream_port),
- upstream_host_(upstream_host)
-{}
+                             const std::string& local_host, unsigned short local_port,
+                             const std::string& upstream_host, unsigned short upstream_port
+                             ) : io_service_(io_service),
+                                 localhost_address(boost::asio::ip::address_v4::from_string(local_host)),
+                                 acceptor_(io_service_, boost::asio::ip::tcp::endpoint(localhost_address, local_port)),
+                                 upstream_port_(upstream_port),
+                                 upstream_host_(upstream_host)
+                             {}
 
 bool ProxyAcceptor::accept_connections()
 {
   try
   {
-     session_ = boost::shared_ptr<ProxyBridge>(new ProxyBridge(io_service_));
+       session_ = boost::shared_ptr<ProxyBridge>(new ProxyBridge(io_service_));
 
-     acceptor_.async_accept(session_->downstream_socket(),
-          boost::bind(&ProxyAcceptor::handle_accept,
-               this,
-               boost::asio::placeholders::error));
+       acceptor_.async_accept(session_->downstream_socket(),
+                              boost::bind(&ProxyAcceptor::handle_accept,
+                              this,
+                              boost::asio::placeholders::error));
   }
   catch(std::exception& e)
   {

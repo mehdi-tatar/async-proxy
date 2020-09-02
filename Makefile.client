@@ -1,14 +1,15 @@
 CXX      := -g++
-CXXFLAGS := -pedantic-errors -Wall -Wextra
+CXXFLAGS := -pedantic-errors -Wall -Wextra --std=c++17
 LDFLAGS  := 
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)/apps
 TARGET   := client
-INCLUDE  := -Iinclude/ -Iinclude/client
-SRC      :=                           \
-   $(wildcard src/client/*.cpp)       \
-   $(wildcard src/main-client.cpp)    \
+INCLUDE  := -Iinclude/ -Iinclude/client -Iinclude/config-reader
+SRC      :=                            \
+   $(wildcard src/config-reader/*.cpp) \
+   $(wildcard src/client/*.cpp)        \
+   $(wildcard src/main-client.cpp)     \
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 

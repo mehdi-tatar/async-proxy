@@ -1,12 +1,13 @@
 CXX      := -g++
-CXXFLAGS := -pedantic-errors -Wall -Wextra
+CXXFLAGS := -pedantic-errors -Wall -Wextra --std=c++17
 LDFLAGS  := -lpthread
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)/apps
 TARGET   := remote-server
-INCLUDE  := -Iinclude/ -Iinclude/remote-server
+INCLUDE  := -Iinclude/ -Iinclude/remote-server -Iinclude/config-reader
 SRC      :=                                \
+   $(wildcard src/config-reader/*.cpp)     \
    $(wildcard src/remote-server/*.cpp)     \
    $(wildcard src/main-remote-server.cpp)  \
 
