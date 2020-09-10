@@ -1,12 +1,13 @@
 CXX      := -g++
-CXXFLAGS := -pedantic-errors -Wall -Wextra
+CXXFLAGS := -pedantic-errors -Wall -Wextra --std=c++17
 LDFLAGS  := -lpthread
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)/apps
 TARGET   := proxy-server
-INCLUDE  := -Iinclude/ -Iinclude/proxy-server
+INCLUDE  := -Iinclude/ -Iinclude/proxy-server -Iinclude/config-reader
 SRC      :=                                \
+   $(wildcard src/config-reader/*.cpp)     \
    $(wildcard src/proxy-server/*.cpp)      \
    $(wildcard src/main-proxy-server.cpp)   \
 
