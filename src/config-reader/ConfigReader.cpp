@@ -57,22 +57,74 @@ ConfigReader::ConfigReader(string path_file)
         std::cerr << "Parsing failed:\n" << err << "\n";
     }
 
-	m_ip_port_config_server   = new IpPortConfig(server_ip, stoi(server_port));
-	m_ip_port_config_upstream = new IpPortConfig(upstream_ip, stoi(upstream_port));
+	this->m_ip_port_config_server   = new IpPortConfig(server_ip, stoi(server_port));
+	this->m_ip_port_config_upstream = new IpPortConfig(upstream_ip, stoi(upstream_port));
 } 
+
+ConfigReader::ConfigReader(const ConfigReader &config_reader)
+{
+    // Deep Copy
+    if(config_reader.m_ip_port_config_server != NULLPTR) {
+        this->m_ip_port_config_server = new IpPortConfig(config_reader.get_config_server());
+    }
+    else {
+        this->m_ip_port_config_server = NULLPTR;
+    }
+
+    if(config_reader.m_ip_port_config_upstream != NULLPTR) {
+        this->m_ip_port_config_upstream = new IpPortConfig(config_reader.get_config_upstream());
+    }
+    else {
+        this->m_ip_port_config_upstream = NULLPTR;
+    }
+}
+
+ConfigReader & ConfigReader::operator = (const ConfigReader &config_reader)
+{
+    // self assignment
+    if(this == &config_reader) {
+        return *this;
+    }
+
+    // change size
+    delete this->m_ip_port_config_server;
+    delete this->m_ip_port_config_upstream;
+
+
+    // Deep Copy
+    if(config_reader.m_ip_port_config_server != NULLPTR) {
+        this->m_ip_port_config_server = new IpPortConfig(config_reader.get_config_server());
+    }
+    else {
+        this->m_ip_port_config_server = NULLPTR;
+    }
+
+    if(config_reader.m_ip_port_config_upstream != NULLPTR) {
+        this->m_ip_port_config_upstream = new IpPortConfig(config_reader.get_config_upstream());
+    }
+    else {
+        this->m_ip_port_config_upstream = NULLPTR;
+    }
+
+    return *this;
+}
 
 ConfigReader::~ConfigReader()
 {
-	delete m_ip_port_config_server;
-	delete m_ip_port_config_upstream;
+    if(this->m_ip_port_config_server != NULLPTR) {
+        delete this->m_ip_port_config_server;
+    }
+    if(this->m_ip_port_config_upstream != NULLPTR) {
+        delete this->m_ip_port_config_upstream;
+    }
 }
 
-IpPortConfig ConfigReader::get_config_server()
+IpPortConfig ConfigReader::get_config_server() const
 {
     return (*m_ip_port_config_server);
 }
 
-IpPortConfig ConfigReader::get_config_upstream()
+IpPortConfig ConfigReader::get_config_upstream() const
 {
     return (*m_ip_port_config_upstream);
 }

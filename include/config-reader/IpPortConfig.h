@@ -12,10 +12,11 @@ class IpPortConfig
   public:
     IpPortConfig(string ip);
     IpPortConfig(string ip, int port);
+    IpPortConfig(const IpPortConfig &ip_port_config);
     ~IpPortConfig();
 
-    string get_ip();
-    int    get_port();
+    string get_ip() const;
+    int    get_port() const;
 
 
   private:
